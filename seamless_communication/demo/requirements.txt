@@ -1,0 +1,6 @@
+fairseq2
+/opt/seamless_communication
+gradio
+huggingface_hub
+torch
+torchaudio
