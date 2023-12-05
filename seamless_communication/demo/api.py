@@ -40,6 +40,7 @@ def m4t(inType,inLang,inStr,outType,outLang):
     )
     resData = {}
     if task_name in ["S2ST", "T2ST"]:
+        
         fileName = datetime.datetime.now().strftime('%Y%m%d_%H%M%S') + '.wav'
         scipy.io.wavfile.write('/opt/seamless_communication/media/out/' + fileName, rate=sr, data=wav.cpu().detach().numpy())
         resData['wav'] = 'http://127.0.0.1:8081/media/' + fileName
@@ -133,7 +134,9 @@ def postRequest():
             return data
     # 如果不是以上，默认传入的是文本，则直接对文本进行操作
     else:
+        data['inText'] = inStr
         data['data'] = m4t('text',inLang,inStr,outType,outLang)
+        data['outText'] = data['data']['text']
         data['code'] = 200
         return data
     
@@ -143,13 +146,16 @@ def postRequest():
         file = open(inStr,"r")
         inText = file.read()
         file.close()
+        data['inText'] = inText
         # 获取结果
         data['data'] = m4t('text',inLang,inText,outType,outLang)
+        data['outText'] = data['data']['text']
         data['code'] = 200
         return data
     else:
         # 获取结果
         data['data'] = m4t('speech',inLang,inStr,outType,outLang)
+        data['outText'] = data['data']['text']
         data['code'] = 200
         return data
             

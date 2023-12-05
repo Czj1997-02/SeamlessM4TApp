@@ -15,6 +15,20 @@ class HomeView extends GetView<HomeController> {
     print("开始录制");
     controller.outText.text = '';
   }
+  setResValue(res) async {
+    if (res.containsKey('inText') && res['inText'] != '' && res['inText'] != null) {
+      controller.inText.text = res['inText'];
+    } else {
+      controller.inText.text = '';
+    }
+    if (res.containsKey('outText') && res['outText'] != '' && res['outText'] != null) {
+      controller.outText.text = res['outText'];
+    } else {
+      controller.outText.text = res['data']['text'];
+    }
+    controller.wavPath.value = res['data']['wav'];
+    await audioPlugin.play(res['data']['wav']);
+  }
   stopRecord(String path, double audioTimeLength, bool isUp) async {
     print("结束束录制");
     print("音频文件位置" + path);
@@ -24,11 +38,8 @@ class HomeView extends GetView<HomeController> {
       controller.isLoading.value = true;
       var res = await PostApi.sendPostRequest(path,'file',HomeController.inLang.value,HomeController.outLang.value);
       controller.isLoading.value = false;
-      print(res);
       if (res['code'] == 200) {
-        controller.outText.text = res['data']['text'];
-        controller.wavPath.value = res['data']['wav'];
-        await audioPlugin.play(res['data']['wav']);
+        await setResValue(res);
       }
     }
     // var sendRes = await FilesApi.uploadFilePath(path);
@@ -37,11 +48,8 @@ class HomeView extends GetView<HomeController> {
     controller.isLoading.value = true;
     var res = await PostApi.sendPostRequest(inStr,'text',HomeController.inLang.value,HomeController.outLang.value);
     controller.isLoading.value = false;
-    print(res);
     if (res['code'] == 200) {
-      controller.outText.text = res['data']['text'];
-      controller.wavPath.value = res['data']['wav'];
-      await audioPlugin.play(res['data']['wav']);
+      await setResValue(res);
     }
   }
 
@@ -87,31 +95,73 @@ class HomeView extends GetView<HomeController> {
                   ListView(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.all(20.0),
-                        child: Container(
-                          decoration: BoxDecoration(
-                              color: Colors.white60,
-                              border: Border.all(
-                                  color: Colors.black38, width: 1),
-                              borderRadius: BorderRadius.circular((10.0))),
-                          width: MediaQuery.of(context).size.width,
-                          child: TextField(
-                            maxLines: null,
-                            controller: controller.outText, // 绑定控制器到文本框
-                            keyboardType: TextInputType.text,
-                            decoration: InputDecoration(
-                              hintText: '输出文本',
-                              suffixIcon: IconButton(
-                                  onPressed: () {controller.outText.clear();},//
-                                  icon: Icon(Icons.cancel,size: 18,)
+                          padding: const EdgeInsets.all(10.0),
+                          child: Column(
+                            children: [
+                              controller.inText.text != '' ? Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.white60,
+                                      border: Border.all(
+                                          color: Colors.black38, width: 1),
+                                      borderRadius: BorderRadius.circular((10.0))),
+                                  width: MediaQuery.of(context).size.width,
+                                  child: TextField(
+                                    maxLines: null,
+                                    controller: controller.inText, // 绑定控制器到文本框
+                                    keyboardType: TextInputType.text,
+                                    decoration: InputDecoration(
+                                      hintText: '输入文本',
+                                      suffixIcon: IconButton(
+                                          onPressed: () {
+                                            controller.outText.clear();
+                                            controller.outText.text = '';
+                                            controller.inText.clear();
+                                            controller.inText.text = '';
+                                            controller.wavPath.value = '';
+                                          },//
+                                          icon: const Icon(Icons.cancel,size: 18,)
+                                      ),
+                                      contentPadding: const EdgeInsets.all(8.5),
+                                      border: InputBorder.none,
+                                    ),
+                                    autofocus: false,
+                                  )
+                              ):const SizedBox(),
+                              controller.inText.text != '' ?
+                              const SizedBox(
+                                height: 10,
+                              ):const SizedBox(),
+                              Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.white60,
+                                      border: Border.all(
+                                          color: Colors.black38, width: 1),
+                                      borderRadius: BorderRadius.circular((10.0))),
+                                  width: MediaQuery.of(context).size.width,
+                                  child: TextField(
+                                    maxLines: null,
+                                    controller: controller.outText, // 绑定控制器到文本框
+                                    keyboardType: TextInputType.text,
+                                    decoration: InputDecoration(
+                                      hintText: '输出文本',
+                                      suffixIcon: IconButton(
+                                          onPressed: () {
+                                            controller.outText.clear();
+                                            controller.outText.text = '';
+                                            controller.inText.clear();
+                                            controller.inText.text = '';
+                                            controller.wavPath.value = '';
+                                          },//
+                                          icon: const Icon(Icons.cancel,size: 18,)
+                                      ),
+                                      contentPadding: const EdgeInsets.all(8.5),
+                                      border: InputBorder.none,
+                                    ),
+                                    autofocus: false,
+                                  )
                               ),
-                              contentPadding: const EdgeInsets.all(8.5),
-                              border: InputBorder.none,
-                            ),
-                            autofocus: false,
+                            ],
                           )
-                        )
-
                       ),
                       Container(
                         child: Obx(()=>controller.wavPath.value != ''?

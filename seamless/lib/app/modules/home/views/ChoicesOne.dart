@@ -29,8 +29,10 @@ class ChoicesOne extends StatefulWidget {
 
 class ChoicesOneState extends State<ChoicesOne> {
   List<DropdownMenuItem> items = [];
-  // List<int> values = [];
   String selectedValueSingleDialog = '';
+  myMatchFn(item, keyword) {
+    return (item.child.toString().contains(keyword));
+  }
   @override
   Widget build(BuildContext context) {
     Map<String,dynamic> theValue = {};
@@ -66,6 +68,17 @@ class ChoicesOneState extends State<ChoicesOne> {
           // print(id!);
           // widget.onChoices(id!);
           // widget.inChoices(value);
+        },
+        searchFn: (keyword, items) {
+          List<int> shownIndexes = [];
+          int i = 0;
+          items.forEach((item) {
+            if (myMatchFn(item, keyword) || (keyword?.isEmpty ?? true)) {
+              shownIndexes.add(i);
+            }
+            i++;
+          });
+          return (shownIndexes);
         },
         isExpanded: true,
         dialogBox: true,

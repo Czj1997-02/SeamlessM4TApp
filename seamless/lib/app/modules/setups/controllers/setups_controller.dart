@@ -1,10 +1,20 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
+import '../../../../store/sys_store.dart';
+import '../../home/controllers/home_controller.dart';
+
 class SetupsController extends GetxController {
-  //TODO: Implement SetupsController
+
+
+  SysStore sysStore = SysStore();
+
+  TextEditingController baseUrl = TextEditingController();
+
 
   List speechSource = [
     { 'value': 'cmn', 'label': '普通话(中文)' },
+    { 'value': 'yue', 'label': '广东话(粤语)' },
     { 'value': 'jpn', 'label': '日本語' },
     { 'value': 'eng', 'label': '英语' },
     { 'value': 'afr', 'label': '南非荷兰语' },
@@ -102,7 +112,6 @@ class SetupsController extends GetxController {
     { 'value': 'vie', 'label': '越南语' },
     { 'value': 'xho', 'label': '科萨' },
     { 'value': 'yor', 'label': '约鲁巴' },
-    { 'value': 'yue', 'label': '广东话' },
     { 'value': 'zlm', 'label': '马来语口语' },
     { 'value': 'zsm', 'label': '标准马来语' },
     { 'value': 'zul', 'label': '祖鲁' }
@@ -111,6 +120,7 @@ class SetupsController extends GetxController {
   // textTarget = textSource
   List textSource = [
     { 'value': 'cmn', 'label': '普通话(中文)' },
+    { 'value': 'yue', 'label': '广东话(粤语)' },
     { 'value': 'eng', 'label': '英语' },
     { 'value': 'afr', 'label': '南非荷兰语' },
     { 'value': 'amh', 'label': '阿姆哈拉语' },
@@ -202,7 +212,6 @@ class SetupsController extends GetxController {
     { 'value': 'uzn', 'label': '北乌兹别克语' },
     { 'value': 'vie', 'label': '越南语' },
     { 'value': 'yor', 'label': '约鲁巴' },
-    { 'value': 'yue', 'label': '广东话' },
     { 'value': 'zsm', 'label': '标准马来语' },
     { 'value': 'zul', 'label': '祖鲁' },
   ];
@@ -246,8 +255,16 @@ class SetupsController extends GetxController {
     { 'value': 'vie', 'label': '越南语' },
   ];
 
+  getStore() async {
+    HomeController.inLang.value =  await sysStore.getInLang();
+    HomeController.outLang.value =  await sysStore.getOutLang();
+    HomeController.postType.value =  await sysStore.getPostType();
+    baseUrl.text = await sysStore.getBaseUrl();
+  }
+
   @override
-  void onInit() {
+  Future<void> onInit() async {
+    await getStore();
     super.onInit();
   }
 

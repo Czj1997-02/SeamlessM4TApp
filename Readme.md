@@ -188,3 +188,7 @@ sudo chmod -R 755 /opt/seamless_communication/media/out/
 
 #### 八、 Flutter App
 
+<img src="https://gitee.com/CZJpython/SeamlessM4T-APP/raw/master/static/Screenshot_2023-11-27-10-08-25-252_comhundunseamless_1701050964.jpg" width="150" >
+<img src="https://gitee.com/CZJpython/SeamlessM4T-APP/raw/master/static/Screenshot_2023-11-27-10-07-14-905_comhundunseamless_1701050940.jpg" width="150" >
+<img src="https://gitee.com/CZJpython/SeamlessM4T-APP/raw/master/static/Screenshot_2023-11-27-10-07-19-337_comhundunseamless_1701050947.jpg" width="150" >
+<img src="https://gitee.com/CZJpython/SeamlessM4T-APP/raw/master/static/Screenshot_2023-11-27-10-08-17-706_comhundunseamless_1701050956.jpg" width="150" >

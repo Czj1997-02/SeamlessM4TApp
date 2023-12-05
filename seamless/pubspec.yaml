@@ -42,6 +42,7 @@ dependencies:
   search_choices: 2.0.19
   audioplayer: 0.8.1
   audioplayer_web: 0.7.1
+  shared_preferences: ^2.0.8
 
 dev_dependencies:
   flutter_test:
